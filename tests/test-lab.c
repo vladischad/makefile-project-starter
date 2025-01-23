@@ -242,6 +242,45 @@ void test_notInList(void)
   free(data);
 }
 
+
+
+// New test: Check adding NULL data
+void test_addNullData(void) {
+  void *result = list_add(lst_, NULL);
+  TEST_ASSERT_NULL(result);
+  TEST_ASSERT_EQUAL_INT(0, lst_->size);
+}
+
+// New test: Remove from empty list
+void test_removeFromEmptyList(void) {
+  void *data = list_remove_index(lst_, 0);
+  TEST_ASSERT_NULL(data);
+  TEST_ASSERT_EQUAL_INT(0, lst_->size);
+}
+
+// New test: Large data set
+void test_largeDataset(void) {
+  for (int i = 0; i < 1000; ++i) {
+    list_add(lst_, alloc_data(i));
+  }
+  TEST_ASSERT_EQUAL_INT(1000, lst_->size);
+  for (int i = 0; i < 1000; ++i) {
+    void *data = list_remove_index(lst_, 0);
+    TEST_ASSERT_NOT_NULL(data);
+    free(data);
+  }
+  TEST_ASSERT_EQUAL_INT(0, lst_->size);
+}
+
+// New test: Check circular behavior
+void test_circularLinks(void) {
+  populate_list();
+  TEST_ASSERT_TRUE(lst_->head->prev->next == lst_->head);
+  TEST_ASSERT_TRUE(lst_->head->next->prev == lst_->head);
+}
+
+
+
 int main(void) {
   UNITY_BEGIN();
   RUN_TEST(test_create_destroy);
@@ -255,5 +294,12 @@ int main(void) {
   RUN_TEST(test_indexOf0);
   RUN_TEST(test_indexOf3);
   RUN_TEST(test_notInList);
+
+  //My added tests
+  RUN_TEST(test_addNullData);
+  RUN_TEST(test_removeFromEmptyList);
+  RUN_TEST(test_largeDataset);
+  RUN_TEST(test_circularLinks);
+
   return UNITY_END();
 }
