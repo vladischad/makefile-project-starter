@@ -1,3 +1,9 @@
+/**
+ * lab.c
+ * 
+ * @author Vladyslav (Vlad) Maliutin
+ */
+
 #include "lab.h"
 #include <stdlib.h>
 
